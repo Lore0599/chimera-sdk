@@ -42,6 +42,10 @@ static uint32_t stack_size_3[CLUSTER_3_NUMCORES] = {0x800, 0x4000};
 static uint32_t stack_size_4[CLUSTER_4_NUMCORES] = {0x800, 0x800, 0x800, 0x800, 0x800,
                                                     0x800, 0x800, 0x800, 0x4000};
 
+#define STACK_ADDRESS_5 (_chimera_clusterBase[5] + 0x20000 - 1)
+static uint32_t stack_size_5[CLUSTER_5_NUMCORES] = {0x1000, 0x1000, 0x1000, 0x1000, 0x1000,
+                                                    0x1000, 0x1000, 0x1000, 0x4000};
+
 // Timeout for cluster execution (in RTC ticks)
 #define CLUSTER_TIMEOUT_MS 5000
 
@@ -106,9 +110,9 @@ int main(void) {
         .default_repetitions = 1,     // Number of repetitions in automatic mode
         .timeout = CLUSTER_TIMEOUT_MS,
         .clusters = 1,
-        .clusterIds = {4},
-        .stack_start = {(void *)STACK_ADDRESS_4},
-        .stack_sizes = {stack_size_4},
+        .clusterIds = {5},
+        .stack_start = {(void *)STACK_ADDRESS_5},
+        .stack_sizes = {stack_size_5},
         .function_test = (void *)ita_matmul_l1_test,
         .function_interrupt = (void *)clusterInterruptHandler,
     };

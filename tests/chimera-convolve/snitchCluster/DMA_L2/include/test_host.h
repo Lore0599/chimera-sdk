@@ -13,6 +13,7 @@ typedef struct {
     dma_direction_t direction;
     void *pointer_l2;
     size_t size_bytes;
+    size_t init_size_l2;
 } dma_l2_test_args_t;
 
 #endif //_TEST_HOST_INCLUDE_GUARD_

@@ -166,6 +166,8 @@ int test_cluster(test_cluster_cfg_t *test_cfg) {
         void *stack_cluster_ptr[test_cfg->clusters][NUM_CLUSTER_CORES];
         for (int id = 0; id < test_cfg->clusters; id++) {
             uint8_t clusterId = test_cfg->clusterIds[id];
+            uint32_t hartId_min = _chimera_hartBase[clusterId];
+            uint32_t hartId_max = _chimera_hartBase[clusterId] + _chimera_numCores[clusterId] - 1;
             if (test_cfg->mode != TEST_MODE_DUTCTL) {
                 // printf_log("----------------------------------------\n");
                 // printf_log("Setting up cluster %d...\n", clusterId);

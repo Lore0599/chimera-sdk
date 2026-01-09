@@ -49,7 +49,10 @@
     "add t1, t1, t3\n"   /* t1 += t3 (cluster_id = 3) */ \
     "sltu t3, t0, %4\n"  /* t3 = (t0 < thresh4) ? 1 : 0 */ \
     "xori t3, t3, 1\n"   /* t3 = (t0 >= thresh4) ? 1 : 0 */ \
-    "add t1, t1, t3\n"   /* t1 += t3 (cluster_id = 4) */
+    "add t1, t1, t3\n"   /* t1 += t3 (cluster_id = 4) */  \
+    "sltu t3, t0, %5\n"  /* t3 = (t0 < thresh5) ? 1 : 0 */ \
+    "xori t3, t3, 1\n"   /* t3 = (t0 >= thresh5) ? 1 : 0 */ \
+    "add t1, t1, t3\n"   /* t1 += t3 (cluster_id = 5) */
 
 /**
  * @brief Compute cluster id form the hartid adn set busy flag.
@@ -68,7 +71,9 @@
                    "r"((uintptr_t)(HOST_NUMCORES + CLUSTER_0_NUMCORES + CLUSTER_1_NUMCORES + \
                                    CLUSTER_2_NUMCORES)), \
                    "r"((uintptr_t)(HOST_NUMCORES + CLUSTER_0_NUMCORES + CLUSTER_1_NUMCORES + \
-                                   CLUSTER_2_NUMCORES + CLUSTER_3_NUMCORES)) \
+                                   CLUSTER_2_NUMCORES + CLUSTER_3_NUMCORES)), \
+                    "r"((uintptr_t)(HOST_NUMCORES + CLUSTER_0_NUMCORES + CLUSTER_1_NUMCORES + \
+                                   CLUSTER_2_NUMCORES + CLUSTER_3_NUMCORES + CLUSTER_4_NUMCORES)) \
                  : "t0", "t1", "t2", "memory");
 
 /**
@@ -88,7 +93,9 @@
                    "r"((uintptr_t)(HOST_NUMCORES + CLUSTER_0_NUMCORES + CLUSTER_1_NUMCORES + \
                                    CLUSTER_2_NUMCORES)), \
                    "r"((uintptr_t)(HOST_NUMCORES + CLUSTER_0_NUMCORES + CLUSTER_1_NUMCORES + \
-                                   CLUSTER_2_NUMCORES + CLUSTER_3_NUMCORES)) \
+                                   CLUSTER_2_NUMCORES + CLUSTER_3_NUMCORES)), \
+                    "r"((uintptr_t)(HOST_NUMCORES + CLUSTER_0_NUMCORES + CLUSTER_1_NUMCORES + \
+                                   CLUSTER_2_NUMCORES + CLUSTER_3_NUMCORES + CLUSTER_4_NUMCORES)) \
                  : "t0", "t1", "t2", "memory");
 
 /** @} */

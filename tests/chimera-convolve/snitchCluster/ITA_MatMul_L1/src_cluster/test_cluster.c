@@ -89,6 +89,8 @@ int32_t ita_matmul_l1_test(void *args) {
         const int8_t *l1_arena_end = (int8_t *)snrt_l1_allocator()->next;
 
         // Copy data from L2 to L1
+        uint32_t dma_start_cycle = 0, dma_end_cycle = 0;
+        dma_start_cycle = snrt_mcycle();
         snrt_dma_start_1d((void *)input_a0_buff, (void *)input_q,
                           SEQUENCE_LENGTH * EMBEDDING_SPACE);
         snrt_dma_start_1d((void *)input_b0_buff, (void *)input_Wq,
@@ -97,6 +99,7 @@ int32_t ita_matmul_l1_test(void *args) {
                           PROJECTION_SPACE * sizeof(ita_int24_t));
         snrt_dma_wait_all();
 
+        dma_end_cycle = snrt_mcycle();
         // Properly reset ITA
         ita_soft_clear();
         ita_acquire_job();

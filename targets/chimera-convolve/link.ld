@@ -105,6 +105,9 @@ SECTIONS {
   .l1_c4_cls  (NOLOAD): ALIGN(16) {
     . += __cls_reserved_size;
   } > l1_c4
+  .l1_c5_cls  (NOLOAD): ALIGN(16) {
+    . += __cls_reserved_size;
+  } > l1_c5
 
   .l1_c0 : ALIGN(16) {
     __l1_c0_start = .;
@@ -170,6 +173,19 @@ SECTIONS {
 
   __l1_c4_lma_start = LOADADDR(.l1_c4);
   __l1_c4_lma_end = LOADADDR(.l1_c4) + SIZEOF(.l1_c4);
+
+  .l1_c5 : ALIGN(16) {
+    __l1_c5_start = .;
+    *(.l1_c5 .l1_c5.*)
+    __l1_c5_end = .;
+    . = ALIGN(16);
+    __l1_c5_heap_start = .;
+    __l1_c5_heap_end = ORIGIN(l1_c5) + LENGTH(l1_c5);
+  } > l1_c5 AT > memisl
+
+  __l1_c5_lma_start = LOADADDR(.l1_c5);
+  __l1_c5_lma_end = LOADADDR(.l1_c5) + SIZEOF(.l1_c5);
+
 
   .l2_heap : ALIGN(16) {
     __l2_heap_start = .;

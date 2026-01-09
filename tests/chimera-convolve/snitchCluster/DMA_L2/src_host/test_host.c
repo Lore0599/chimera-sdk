@@ -43,8 +43,23 @@ static uint32_t stack_size_3[CLUSTER_3_NUMCORES] = {0x1000, 0x4000};
 static uint32_t stack_size_4[CLUSTER_4_NUMCORES] = {0x1000, 0x1000, 0x1000, 0x1000, 0x1000,
                                                     0x1000, 0x1000, 0x1000, 0x4000};
 
+#define STACK_ADDRESS_5 (_chimera_clusterBase[5] + 0x20000 - 1)
+static uint32_t stack_size_5[CLUSTER_5_NUMCORES] = {0x1000, 0x1000, 0x1000, 0x1000, 0x1000,
+                                                    0x1000, 0x1000, 0x1000, 0x4000};
+
 // Timeout for cluster execution (in RTC ticks)
 #define CLUSTER_TIMEOUT_MS 10000
+
+// Always align data with page size (4 KiB)
+#define PG_SIZE 4096
+#define MEM_RD_START 0x48020000
+
+
+static inline uintptr_t align_up_uintptr(uintptr_t addr, uintptr_t align)
+{
+    return (addr + (align - 1u)) & ~(align - 1u);
+}
+
 
 static const dif_gpio_t gpio = {
     .base_addr = (volatile void *)&__base_gpio,
@@ -107,11 +122,10 @@ int main(void) {
         .default_frequency_mhz = 200, // Frequency in MHz in automatic mode
         .default_repetitions = 1,     // Number of repetitions in automatic mode
         .timeout = CLUSTER_TIMEOUT_MS,
-        .clusters = 5,
-        .clusterIds = {0, 1, 2, 3, 4},
-        .stack_start = {(void *)STACK_ADDRESS_0, (void *)STACK_ADDRESS_1, (void *)STACK_ADDRESS_2,
-                        (void *)STACK_ADDRESS_3, (void *)STACK_ADDRESS_4},
-        .stack_sizes = {stack_size_0, stack_size_1, stack_size_2, stack_size_3, stack_size_4},
+        .clusters = 2,
+        .clusterIds = {4, 5},
+        .stack_start = {(void *)STACK_ADDRESS_4, (void *)STACK_ADDRESS_5},
+        .stack_sizes = {stack_size_4, stack_size_5},
         .function_test = (void *)dma_l2_test,
         .function_interrupt = (void *)clusterInterruptHandler,
     };
@@ -151,16 +165,24 @@ int main(void) {
     // SCRATCH3: Repetitions
     // SCRATCH4: DMA Direction (0: Read L2, 1: Write L2)
     // SCRATCH5: Size in bytes
+
     for (int id = 0; id < test_cfg.clusters; id++) {
         test_cluster_args_t *arg = test_cfg.args[id];
         dma_l2_test_args_t *dma_arg = (dma_l2_test_args_t *)arg->args;
-        arg->repetitions = scratch[3] == 0 ? 1 : (int32_t)scratch[3];
+        arg->repetitions = scratch[3] == 0 ? 20000 : (int32_t)scratch[3];
         dma_arg->direction = scratch[4] == 0 ? DMA_READ_L2 : DMA_WRITE_L2;
-        dma_arg->size_bytes = scratch[5] == 0 ? 1024 : (size_t)scratch[5];
-        dma_arg->pointer_l2 = (void *)memory_island_malloc(dma_arg->size_bytes * sizeof(int8_t));
+        dma_arg->size_bytes = scratch[5] == 0 ? 32768 : (size_t)scratch[5];
+        dma_arg->init_size_l2 = 4096;
+
+        // void *raw = memory_island_malloc(dma_arg->size_bytes + (PG_SIZE - 1u));
+        // uintptr_t raw_addr = (uintptr_t)raw;
+        // uintptr_t aligned_addr = align_up_uintptr(raw_addr, PG_SIZE);
+        uintptr_t aligned_addr = (uintptr_t) MEM_RD_START;
+
+        dma_arg->pointer_l2 = (void *)aligned_addr;
         if (dma_arg->direction == DMA_READ_L2) {
             // Initialize L2 buffer with some data for read test
-            for (size_t i = 0; i < dma_arg->size_bytes; i++) {
+            for (size_t i = 0; i < dma_arg->init_size_l2; i++) {
                 ((uint8_t *)dma_arg->pointer_l2)[i] = (uint8_t)(i & 0xFF);
             }
         }
