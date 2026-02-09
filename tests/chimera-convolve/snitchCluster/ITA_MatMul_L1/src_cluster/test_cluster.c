@@ -76,9 +76,9 @@ int32_t ita_matmul_l1_test(void *args) {
 
     /********** Cluster Initialization **********/
     if (snrt_is_dm_core()) {
-        printf("Starting ITA MatMul execution (%ux%u x %ux%u = %ux%u) for %d iterations\n",
-               SEQUENCE_LENGTH, EMBEDDING_SPACE, EMBEDDING_SPACE, PROJECTION_SPACE, SEQUENCE_LENGTH,
-               PROJECTION_SPACE, test_args->repetitions);
+        // printf("Starting ITA MatMul execution (%ux%u x %ux%u = %ux%u) for %d iterations\n",
+        //        SEQUENCE_LENGTH, EMBEDDING_SPACE, EMBEDDING_SPACE, PROJECTION_SPACE, SEQUENCE_LENGTH,
+        //        PROJECTION_SPACE, test_args->repetitions);
 
         // L1 buffers
         const int8_t *input_a0_buff = snrt_l1_alloc(SEQUENCE_LENGTH * EMBEDDING_SPACE);

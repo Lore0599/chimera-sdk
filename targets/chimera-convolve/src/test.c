@@ -48,14 +48,14 @@ int test_cluster(test_cluster_cfg_t *test_cfg) {
     volatile uint32_t *scratch =
         (volatile uint32_t *)(&__base_regs + CHESHIRE_SCRATCH_0_REG_OFFSET);
 
-    if (test_cfg->mode != TEST_MODE_DUTCTL) {
-        printf("\n\n");
-        printf_log("========================================\n");
-        printf_log("Chimera %s Test \n", test_cfg->name);
-        printf_log("========================================\n");
-        printf_log("Initial frequency: %u.%03u MHz\n", (core_freq / 1000000),
-                   (core_freq % 1000000));
-    }
+    // if (test_cfg->mode != TEST_MODE_DUTCTL) {
+    //     printf("\n\n");
+    //     printf_log("========================================\n");
+    //     printf_log("Chimera %s Test \n", test_cfg->name);
+    //     printf_log("========================================\n");
+    //     printf_log("Initial frequency: %u.%03u MHz\n", (core_freq / 1000000),
+    //                (core_freq % 1000000));
+    // }
 
     // Buffer to hold run again
     char input_buffer[32];
@@ -124,7 +124,7 @@ int test_cluster(test_cluster_cfg_t *test_cfg) {
             printf("%d\n", target_freq_mhz);
         } else {
             // In other modes, default to 200 MHz
-            printf_log("Using target frequency = %d MHz\n", test_cfg->default_frequency_mhz);
+            // printf_log("Using target frequency = %d MHz\n", test_cfg->default_frequency_mhz);
             target_freq_mhz = test_cfg->default_frequency_mhz;
         }
 

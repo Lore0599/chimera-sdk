@@ -79,25 +79,25 @@ void setGPIO2_GPIO() {
 int main(void) {
 #if defined(TARGET_PLATFORM_CHIMERA_CONVOLVE) && defined(HARDWARE_BACKEND_ASIC)
     // Set GPIO 2 to output and enable FLL bypass
-    setGPIO2_GPIO();
+    // setGPIO2_GPIO();
     // Connect UART to GPIO 0
     setGPIO0_UART_TX();
     // Connect UART RX to GPIO 1
     setGPIO1_UART_RX();
 
     // Configure GPIO 2 as output
-    dif_result_t result = dif_gpio_output_set_enabled(&gpio, 2, kDifToggleEnabled);
-    if (result != kDifOk) {
-        printf_log("Error: Cannot set GPIO 2 as output\n");
-        return -1;
-    }
+    // dif_result_t result = dif_gpio_output_set_enabled(&gpio, 2, kDifToggleEnabled);
+    // if (result != kDifOk) {
+    //     printf_log("Error: Cannot set GPIO 2 as output\n");
+    //     return -1;
+    // }
 
-    // Set GPIO 2 high to enable FLL bypass
-    result = dif_gpio_write(&gpio, 2, kDifToggleEnabled);
-    if (result != kDifOk) {
-        printf_log("Error: Cannot enable FLL bypass\n");
-        return 0;
-    }
+    // // Set GPIO 2 high to enable FLL bypass
+    // result = dif_gpio_write(&gpio, 2, kDifToggleEnabled);
+    // if (result != kDifOk) {
+    //     printf_log("Error: Cannot enable FLL bypass\n");
+    //     return 0;
+    // }
 #endif
 
     test_cluster_result_t test_result[_chimera_numClusters] = {0};

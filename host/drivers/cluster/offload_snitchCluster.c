@@ -179,7 +179,7 @@ void offload_snitchCluster_core(void *function, void *args, void *stack_ptr, uin
 
     uint32_t hartId = _get_hart_id(clusterId, core_id);
 
-    printf("Offloading to core %d in cluster %d with hartid %d\n", core_id, clusterId, hartId);
+    // printf("Offloading to core %d in cluster %d with hartid %d\n", core_id, clusterId, hartId);
 
     *snitchBootAddr = _generate_trampoline(hartId, function, args, stack_ptr);
 
