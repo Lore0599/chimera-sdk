@@ -4,3 +4,5 @@
 add_subdirectory(fll)
 add_subdirectory(sleep)
 add_subdirectory(hyperbus)
+add_subdirectory(l2_latency)
+
