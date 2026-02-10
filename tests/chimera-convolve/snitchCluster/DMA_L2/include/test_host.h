@@ -14,6 +14,7 @@ typedef struct {
     void *pointer_l2;
     size_t size_bytes;
     size_t init_size_l2;
+    uint32_t clusters;
 } dma_l2_test_args_t;
 
 #endif //_TEST_HOST_INCLUDE_GUARD_

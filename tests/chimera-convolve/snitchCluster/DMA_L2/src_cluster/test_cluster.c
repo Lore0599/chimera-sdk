@@ -70,9 +70,11 @@ int32_t dma_l2_test(void *args) {
     snrt_init();
 
     /*
-    * Use teh cluster to copy larger data from L2 to L2
+    * Use the cluster to copy larger data from L2 to L2
     */
     if (user_args -> init_size_l2 != user_args -> size_bytes) {
+        // In this test, the 4th cluster always has to work and will be used to initialize the buffer rapidly
+        // using the wide interface.
         if (snrt_cluster_idx() == 4 && snrt_is_dm_core()) {
 
             printf("Initializing L2 buffer: init size: %zu bytes, target size: %zu bytes\n",
@@ -92,7 +94,7 @@ int32_t dma_l2_test(void *args) {
         }
         snrt_cluster_hw_barrier();
         if (snrt_is_dm_core()) {
-            snrt_partial_barrier((snrt_barrier_t *)&g_intercluster_barrier, 2);
+            snrt_partial_barrier((snrt_barrier_t *)&g_intercluster_barrier, user_args->clusters);
         }
         snrt_cluster_hw_barrier();
     }

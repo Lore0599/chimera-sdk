@@ -173,6 +173,7 @@ int main(void) {
         dma_arg->direction = scratch[4] == 0 ? DMA_READ_L2 : DMA_WRITE_L2;
         dma_arg->size_bytes = scratch[5] == 0 ? 32768 : (size_t)scratch[5];
         dma_arg->init_size_l2 = 4096;
+        dma_arg->clusters = test_cfg.clusters;
 
         // void *raw = memory_island_malloc(dma_arg->size_bytes + (PG_SIZE - 1u));
         // uintptr_t raw_addr = (uintptr_t)raw;
